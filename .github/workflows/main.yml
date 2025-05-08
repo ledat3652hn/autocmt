@@ -4,24 +4,24 @@ on:
   schedule:
     # Chạy từ 6h đến 23h giờ Việt Nam (tức 23h đến 16h UTC)
     - cron: '0 23 * * *'  # 6h sáng VN
-    - cron: '0 0 * * *'   # 7h VN
-    - cron: '0 1 * * *'   # 8h VN
-    - cron: '0 2 * * *'   # 9h VN
-    - cron: '0 3 * * *'   # 10h VN
-    - cron: '0 4 * * *'   # 11h VN
-    - cron: '0 5 * * *'   # 12h trưa VN
-    - cron: '0 6 * * *'   # 13h VN
-    - cron: '0 7 * * *'   # 14h VN
-    - cron: '0 8 * * *'   # 15h VN
-    - cron: '0 9 * * *'   # 16h VN
-    - cron: '0 10 * * *'  # 17h VN
-    - cron: '0 11 * * *'  # 18h VN
-    - cron: '0 12 * * *'  # 19h VN
-    - cron: '0 13 * * *'  # 20h VN
-    - cron: '0 14 * * *'  # 21h VN
-    - cron: '0 15 * * *'  # 22h VN
-    - cron: '0 16 * * *'  # 23h VN
-    - cron: '0 17 * * *'  # 00h VN
+    - cron: '0 0 * * *'
+    - cron: '0 1 * * *'
+    - cron: '0 2 * * *'
+    - cron: '0 3 * * *'
+    - cron: '0 4 * * *'
+    - cron: '0 5 * * *'
+    - cron: '0 6 * * *'
+    - cron: '0 7 * * *'
+    - cron: '0 8 * * *'
+    - cron: '0 9 * * *'
+    - cron: '0 10 * * *'
+    - cron: '0 11 * * *'
+    - cron: '0 12 * * *'
+    - cron: '0 13 * * *'
+    - cron: '0 14 * * *'
+    - cron: '0 15 * * *'
+    - cron: '0 16 * * *'
+    - cron: '0 17 * * *'
   workflow_dispatch:
 
 jobs:
@@ -40,6 +40,20 @@ jobs:
       - name: Install dependencies
         run: |
           pip install selenium
+          sudo apt update
+          sudo apt install -y wget unzip xvfb libxi6 libgconf-2-4 libnss3 libxss1 libappindicator1 libindicator7
+          
+          # Install Chrome
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install -y ./google-chrome-stable_current_amd64.deb
+
+          # Install ChromeDriver
+          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+' | head -1)
+          DRIVER_VERSION=$(wget -qO- "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" | grep -A 10 "$CHROME_VERSION" | grep "linux64" | grep -oP 'https[^"]+')
+          wget "$DRIVER_VERSION" -O chromedriver.zip
+          unzip chromedriver.zip
+          sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+          sudo chmod +x /usr/local/bin/chromedriver
 
       - name: Run script
         run: python cmtup.py
