@@ -18,10 +18,6 @@ options.add_argument("--disable-extensions")
 prefs = {"profile.managed_default_content_settings.images": 2}
 options.add_experimental_option("prefs", prefs)
 
-# ❌ KHÔNG dùng đường dẫn Windows nữa
-# service = Service(r"E:\chromedriver-win64\chromedriver-win64\chromedriver.exe")
-
-# ✅ Dùng mặc định, ChromeDriver đã được cài sẵn trong workflow
 driver = webdriver.Chrome(options=options)
 
 # ================== ĐĂNG NHẬP BẰNG COOKIE ==================
@@ -57,8 +53,21 @@ if "login" in driver.current_url or "recover" in driver.current_url:
 else:
     print("✅ Cookie hợp lệ, đã đăng nhập thành công vào Facebook!")
 
-# ================== CÁC HÀM CŨ GIỮ NGUYÊN ==================
-# Giữ nguyên toàn bộ phần comment_and_delete() và xử lý phía sau
+# ================== ĐỊNH NGHĨA HÀM ==================
+def comment_and_delete(post_id):
+    try:
+        url = f"https://www.facebook.com/{post_id}"
+        driver.get(url)
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+        time.sleep(3)
+
+        print(f"💬 Đã vào bài viết {post_id}")
+        print(f"🗨️ Bình luận (giả lập) và chuẩn bị xóa bài viết {post_id}")
+
+        # Nếu muốn thêm logic thật sự để comment/xoá, hãy bổ sung tại đây
+
+    except Exception as e:
+        print(f"⚠️ Lỗi với bài viết {post_id}: {e}")
 
 # ================== CHẠY NHIỀU BÀI ==================
 post_ids = [
