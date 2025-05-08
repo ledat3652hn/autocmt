@@ -1,0 +1,41 @@
+name: Auto run cmtup.py
+
+on:
+  schedule:
+    # Chạy từ 6h đến 23h giờ Việt Nam (tức 23h đến 16h UTC)
+    - cron: '0 23 * * *'  # 6h sáng VN
+    - cron: '0 0 * * *'   # 7h VN
+    - cron: '0 1 * * *'   # 8h VN
+    - cron: '0 2 * * *'   # 9h VN
+    - cron: '0 3 * * *'   # 10h VN
+    - cron: '0 4 * * *'   # 11h VN
+    - cron: '0 5 * * *'   # 12h trưa VN
+    - cron: '0 6 * * *'   # 13h VN
+    - cron: '0 7 * * *'   # 14h VN
+    - cron: '0 8 * * *'   # 15h VN
+    - cron: '0 9 * * *'   # 16h VN
+    - cron: '0 10 * * *'  # 17h VN
+    - cron: '0 11 * * *'  # 18h VN
+    - cron: '0 12 * * *'  # 19h VN
+    - cron: '0 13 * * *'  # 20h VN
+    - cron: '0 14 * * *'  # 21h VN
+    - cron: '0 15 * * *'  # 22h VN
+    - cron: '0 16 * * *'  # 23h VN
+    - cron: '0 17 * * *'  # 00h VN
+  workflow_dispatch:
+
+jobs:
+  run-cmtup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Run script
+        run: python cmtup.py
