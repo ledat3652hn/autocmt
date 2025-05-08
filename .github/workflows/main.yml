@@ -41,13 +41,15 @@ jobs:
         run: |
           pip install selenium
           sudo apt update
-          sudo apt install -y wget unzip xvfb libxi6 libgconf-2-4 libnss3 libxss1 libappindicator1 libindicator7
-          
-          # Install Chrome
+
+          # Các gói thay thế cho các lib lỗi thời
+          sudo apt install -y wget unzip xvfb libxi6 libnss3 libxss1 libgtk-3-0 libayatana-appindicator1
+
+          # Cài Chrome
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo apt install -y ./google-chrome-stable_current_amd64.deb
 
-          # Install ChromeDriver
+          # Cài ChromeDriver tương ứng
           CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+' | head -1)
           DRIVER_VERSION=$(wget -qO- "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" | grep -A 10 "$CHROME_VERSION" | grep "linux64" | grep -oP 'https[^"]+')
           wget "$DRIVER_VERSION" -O chromedriver.zip
