@@ -2,8 +2,7 @@ name: Auto run cmtup.py
 
 on:
   schedule:
-    # Chạy từ 6h đến 23h giờ Việt Nam (tức 23h đến 16h UTC)
-    - cron: '0 23 * * *'  # 6h sáng VN
+    - cron: '0 23 * * *'
     - cron: '0 0 * * *'
     - cron: '0 1 * * *'
     - cron: '0 2 * * *'
@@ -41,21 +40,14 @@ jobs:
         run: |
           pip install selenium
           sudo apt update
-
-          # Các gói thay thế cho các lib lỗi thời
-          sudo apt install -y wget unzip xvfb libxi6 libnss3 libxss1 libgtk-3-0 libayatana-appindicator1
+          sudo apt install -y wget unzip xvfb libxi6 libnss3 libxss1 libgtk-3-0
 
           # Cài Chrome
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo apt install -y ./google-chrome-stable_current_amd64.deb
 
-          # Cài ChromeDriver tương ứng
-          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+' | head -1)
-          DRIVER_VERSION=$(wget -qO- "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" | grep -A 10 "$CHROME_VERSION" | grep "linux64" | grep -oP 'https[^"]+')
-          wget "$DRIVER_VERSION" -O chromedriver.zip
-          unzip chromedriver.zip
-          sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
-          sudo chmod +x /usr/local/bin/chromedriver
+          # ChromeDriver thường đã cài sẵn trên ubuntu-latest
+          which chromedriver || echo "Bạn cần tự cài thêm nếu cần phiên bản cụ thể"
 
       - name: Run script
         run: python cmtup.py
